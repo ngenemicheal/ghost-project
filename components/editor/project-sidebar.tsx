@@ -1,7 +1,6 @@
 "use client";
 
-import { FolderOpen, Plus, Users, X } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,19 +12,11 @@ interface ProjectSidebarProps {
 }
 
 interface EmptyStateProps {
-  icon: LucideIcon;
-  title: string;
-  description: string;
+  message: string;
 }
 
-function EmptyState({ icon: Icon, title, description }: EmptyStateProps) {
-  return (
-    <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
-      <Icon className="h-8 w-8 text-copy-faint" />
-      <p className="text-sm font-medium text-copy-secondary">{title}</p>
-      <p className="text-xs text-copy-muted">{description}</p>
-    </div>
-  );
+function EmptyState({ message }: EmptyStateProps) {
+  return <p className="text-sm text-copy-muted">{message}</p>;
 }
 
 export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
@@ -35,7 +26,7 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
       aria-hidden={!isOpen}
       inert={!isOpen}
       className={cn(
-        "absolute inset-y-0 left-0 z-40 flex w-80 flex-col rounded-r-2xl border-r border-surface-border bg-surface/90 backdrop-blur-md transition-transform duration-200 ease-out",
+        "absolute inset-y-0 left-0 z-40 flex w-80 flex-col border-r border-surface-border bg-surface transition-transform duration-200 ease-out",
         isOpen ? "translate-x-0" : "-translate-x-full",
       )}
     >
@@ -52,24 +43,35 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
         </Button>
       </div>
 
-      <Tabs defaultValue="my-projects" className="min-h-0 flex-1 gap-0 px-4 pt-4">
-        <TabsList className="w-full bg-subtle">
-          <TabsTrigger value="my-projects">My Projects</TabsTrigger>
-          <TabsTrigger value="shared">Shared</TabsTrigger>
+      <Tabs
+        defaultValue="my-projects"
+        className="min-h-0 flex-1 flex-col gap-0 px-3 pt-3"
+      >
+        <TabsList className="h-9 w-full rounded-xl bg-base p-1">
+          <TabsTrigger
+            value="my-projects"
+            className="rounded-lg text-copy-muted data-[state=active]:bg-subtle data-[state=active]:text-copy-primary"
+          >
+            My Projects
+          </TabsTrigger>
+          <TabsTrigger
+            value="shared"
+            className="rounded-lg text-copy-muted data-[state=active]:bg-subtle data-[state=active]:text-copy-primary"
+          >
+            Shared
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="my-projects">
-          <EmptyState
-            icon={FolderOpen}
-            title="No projects yet"
-            description="Create your first project to get started."
-          />
+        <TabsContent
+          value="my-projects"
+          className="items-center justify-center data-[state=active]:flex"
+        >
+          <EmptyState message="No projects yet." />
         </TabsContent>
-        <TabsContent value="shared">
-          <EmptyState
-            icon={Users}
-            title="Nothing shared with you"
-            description="Projects others share with you will appear here."
-          />
+        <TabsContent
+          value="shared"
+          className="items-center justify-center data-[state=active]:flex"
+        >
+          <EmptyState message="No shared projects yet." />
         </TabsContent>
       </Tabs>
 
